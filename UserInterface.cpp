@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-bool readIntSimple(int& num) {
+bool readIntSimple(int& num) { //Функція зчитування цілого числа
 	cin >> num;
 	if (cin.fail()) {
 		cin.clear();
@@ -14,7 +14,7 @@ bool readIntSimple(int& num) {
 	return true;
 }
 
-int UserInterface::showMenu() {
+int UserInterface::showMenu() { //Виводить меню та зчитує вибір користувача
 	int choice;
 	while (true) {
 		cout << "1. User input.\n";
@@ -26,7 +26,7 @@ int UserInterface::showMenu() {
 	}
 }
 
-PuzzleField UserInterface::getUserField() {
+PuzzleField UserInterface::getUserField() { //Створення пол, користувач заповнює через консоль
 	PuzzleField field(7, 7);
 	vector<vector<int>> userMap(7, vector<int>(7));
 	cout << "Fill in 7x7 matrix:\n";
@@ -40,7 +40,7 @@ PuzzleField UserInterface::getUserField() {
 	return field;
 }
 
-PuzzleField UserInterface::getProgramField() {
+PuzzleField UserInterface::getProgramField() { //Створює програмне поле з фіксованими регіонами
 	PuzzleField field(7, 7);
 	field.setRegionMap({
 		{1,1,1,2,2,2,2},
