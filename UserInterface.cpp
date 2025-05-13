@@ -1,7 +1,7 @@
 #include "UserInterface.h"
 #include <iostream>
-#include <limits>
-#include <vector>
+#include <limits> //Для обробки помилок введення інтеджера
+#include <vector> //Для vector - структура даних
 using namespace std;
 
 bool readIntSimple(int& num) { //Функція зчитування цілого числа

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "UserInterface.h"
-#include "Solver.h"
+#include "UserInterface.h" //Меню для користувача
+#include "Solver.h" //Вирішення задачі
 using namespace std;
 
 int main() {

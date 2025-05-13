@@ -1,6 +1,6 @@
 #ifndef USERINTERFACE_H
 #define USERINTERFACE_H
-#include "PuzzleField.h"
+#include "PuzzleField.h" // Для створення поля та його заповнення
 
 class UserInterface { //UserInterface відповідає за взаємодію з користувачем
 public:
