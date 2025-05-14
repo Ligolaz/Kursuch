@@ -12,7 +12,12 @@ int main() {
 		if (choice == 1) {
 			field = UserInterface::getUserField(); //Користувацький ввід
 		} else if (choice == 2) {
-			field = UserInterface::getProgramField(); //Програмний
+			int testChoice;
+			cout << "Choose what test to run (1 to 4): ";
+			while (!readIntSimple(testChoice) || testChoice < 1 || testChoice > 4) {
+				cout << "Only 1 to 4 is available, choose between them: ";
+			}
+			field = UserInterface::getProgramField(testChoice); //Програмний
 		} else if (choice == 3) {
 			cout << "Exiting program...\n";
 			break;
