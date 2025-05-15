@@ -1,4 +1,4 @@
-#include "UserInterface.h"
+#include "UserInterface.h" //Хедер для інтерфейсу користувача
 #include <iostream>
 #include <limits> //Для обробки помилок введення інтеджера
 #include <vector> //Для vector - структура даних

@@ -10,22 +10,22 @@ Solver::Solver(PuzzleField& field) : field(field) { //Конструктор к�
 }
 
 bool Solver::solve() { //Метод, який запускає процес пошуку рішення
-	return backtrack(1); //Початок з першого регіону
+	return backtrack(1);
 }
 
 bool Solver::backtrack(int regionId) { //Рекурсивний метод для розв'язування задачі, використовуємо бектрекінг
 	if (regionId > field.getRegionCount()) { //Якщо всі регіони заповнені, перевіряємо додаткові умови
-		return field.checkConnected() && field.checkNoSquares(); //Додаткова умова - перевірка на з'єднання та відсутність квадратів
+		return field.checkConnected() && field.checkNoSquares();
 	}
-	auto cells = field.getRegionCells(regionId); //Отримання клітини для поточного регіону
+	auto cells = field.getRegionCells(regionId);
 	for (const auto& tetromino : tetrominoes) { 
-		for (const auto& shape : tetromino.getRotations()) { //Для кожного тетроміно пробуємо всі можливі положення
-			for (const auto& [x, y] : cells) { //Для кожної клітини регіону пробуємо розташувати тетроміно
+		for (const auto& shape : tetromino.getRotations()) {
+			for (const Coord& cell : cells) {
 				//Вирахування базової позиції для тетроміно
-				int baseX = x - shape[0].first;
-				int baseY = y - shape[0].second;
+				int baseX = cell.x - shape[0].x;
+				int baseY = cell.y - shape[0].y;
 				if (!field.canPlaceTetromino(baseX, baseY, shape)) continue; //Перевірка на можливість розташування тетроміно на поточній позиції
-				field.placeTetromino(baseX, baseY, shape, tetromino.getCharRepresentation()); //Якщо можливо - ставимо тетроміно на поле
+				field.placeTetromino(baseX, baseY, shape, tetromino.getFigure());
 				if (backtrack(regionId + 1)) return true; //Рекурсивно вирішуємо задачу для наступного регіону
 				field.removeTetromino(baseX, baseY, shape); //Якщо рішення не вдалося, видаляємо тетроміно і пробуємо інший метод розміщення фігури/інше положення(rotate)/іншу фігуру
 			}
