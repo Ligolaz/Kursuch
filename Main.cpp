@@ -5,30 +5,33 @@ using namespace std;
 
 int main() {
 	int choice; //Змінна для вибору користувача у меню
-
+	PuzzleField* field = nullptr;
 	do {
 		choice = UserInterface::showMenu(); //Виклик меню користувача
-		PuzzleField field(7, 7); //Маємо поле 7на7 для заповнення
 		if (choice == 1) {
-			field = UserInterface::getUserField(); //Користувацький ввід
-		} else if (choice == 2) {
 			int testChoice;
 			cout << "Choose what test to run (1 to 4): ";
-			while (!readIntSimple(testChoice) || testChoice < 1 || testChoice > 4) {
+			while (!UserInterface::readIntSimple(testChoice) || testChoice < 1 || testChoice > 4) {
 				cout << "Only 1 to 4 is available, choose between them: ";
 			}
-			field = UserInterface::getProgramField(testChoice); //Програмний
-		} else if (choice == 3) {
+			delete field;
+			field = new PuzzleField(UserInterface::getProgramField(testChoice)); //Програмне заповнення поля
+		} else if (choice == 2) {
 			cout << "Exiting program...\n";
 			break;
 		}
-		Solver solver(field); //Створюємо об'єкт Solver з отриманим полем
-		if (solver.solve()) {
-			cout << "Tetromino results:\n";
-			field.print(); //Вивід результату
+		if (field) {
+			Solver solver(*field); //Передаємо посилання на поле
+			if (solver.solve()) {
+				cout << "Tetromino results:\n\n";
+				field->print(); //Вивід результату
+				cout << "\n";
+			} else {
+				cout << "You've exited or something went wrong.\n";
+			}
 		} else {
-			cout << "Results don't satisfy expectations.\n";
+		cout << "No field was created. Select option 1 first.\n";
 		}
-	} while (choice != 3); //Цикл повторюєтся поки не буде '3' як choice
+	} while (1); //Цикл повторюєтся поки не буде '2' як choice
 	return 0;
 }

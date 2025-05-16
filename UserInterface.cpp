@@ -4,7 +4,7 @@
 #include <vector> //Для vector - структура даних
 using namespace std;
 
-bool readIntSimple(int& num) { //Функція зчитування цілого числа
+bool UserInterface::readIntSimple(int& num) { //Функція зчитування цілого числа
 	cin >> num;
 	if (cin.fail()) {
 		cin.clear();
@@ -17,32 +17,18 @@ bool readIntSimple(int& num) { //Функція зчитування цілог�
 int UserInterface::showMenu() { //Виводить меню та зчитує вибір користувача
 	int choice;
 	while (true) {
-		cout << "1. User input.\n";
-		cout << "2. Program input.\n";
-		cout << "3. Exit.\n";
+		cout << "1. Program input.\n";
+		cout << "2. Exit.\n";
 		cout << "Enter your choice: ";
-		if (readIntSimple(choice) && (choice >= 1 && choice <= 3)) return choice;
-		cout << "You've got only option from 1 to 3.\n";
+		if (readIntSimple(choice) && (choice >= 1 && choice <= 2)) return choice;
+		cout << "You've got only option 1 or 2.\n";
 	}
 }
 
-PuzzleField UserInterface::getUserField() { //Створення пол, користувач заповнює через консоль
-	PuzzleField field(7, 7);
-	vector<vector<int>> userMap(7, vector<int>(7));
-	cout << "Fill in 7x7 matrix:\n";
-	for (int i = 0; i < 7; ++i)
-		for (int j = 0; j < 7; ++j) {
-			while (!readIntSimple(userMap[i][j])) {
-				cout << "Enter integer: ";
-			}
-		}
-	field.setRegionMap(userMap);
-	return field;
-}
-
 PuzzleField UserInterface::getProgramField(int fieldNum) { //Створює програмне поле з фіксованими регіонами
+	PuzzleField field(1, 1); //Dummy
 	if (fieldNum == 1) {
-		PuzzleField field(7, 7);
+		field = PuzzleField(7, 7);
 		field.setRegionMap({
 			{1, 2, 2, 2, 2, 3, 3},
 			{1, 1, 4, 2, 3, 3, 3},
@@ -53,7 +39,7 @@ PuzzleField UserInterface::getProgramField(int fieldNum) { //Створює пр
 			{5, 5, 5, 4, 8, 8, 8},
 		});
 	} else if (fieldNum == 2) {
-		PuzzleField field(7, 7);
+		field = PuzzleField(7, 7);
 		field.setRegionMap({
 			{1, 1, 2, 2, 2, 2, 2},
 			{1, 1, 1, 1, 3, 3, 2},
@@ -64,7 +50,7 @@ PuzzleField UserInterface::getProgramField(int fieldNum) { //Створює пр
 			{6, 6, 6, 7, 7, 7, 4},
 		});
 	} else if (fieldNum == 3) {
-		PuzzleField field(9, 9);
+		field = PuzzleField(9, 9);
 		field.setRegionMap({
 			{1, 1, 2, 2, 3, 3, 3, 4, 4},
 			{1, 2, 2, 2, 5, 3, 3, 4, 4},
@@ -77,7 +63,7 @@ PuzzleField UserInterface::getProgramField(int fieldNum) { //Створює пр
 			{9, 9,10,11,11,11,11,12,12},
 		});
 	} else if (fieldNum == 4) {
-		PuzzleField field(10, 10);
+		field = PuzzleField(10, 10);
 		field.setRegionMap({
 			{1, 1, 1, 1, 2, 2, 2, 2, 2, 3},
 			{1, 1, 4, 2, 2, 5, 5, 5, 2, 3},
