@@ -26,8 +26,10 @@ bool Solver::backtrack(int regionId) { //Рекурсивний метод дл�
 				int baseY = cell.y - shape[0].y;
 				if (!field.canPlaceTetromino(baseX, baseY, shape)) continue; //Перевірка на можливість розташування тетроміно на поточній позиції
 				field.placeTetromino(baseX, baseY, shape, tetromino.getFigure());
-				if (backtrack(regionId + 1)) return true; //Рекурсивно вирішуємо задачу для наступного регіону
-				field.removeTetromino(baseX, baseY, shape); //Якщо рішення не вдалося, видаляємо тетроміно і пробуємо інший метод розміщення фігури/інше положення(rotate)/іншу фігуру
+				if (field.noSameTetramino(baseX, baseY, shape, tetromino.getFigure()) && field.checkNoSquares()) { //Рекурсивно вирішуємо задачу для регіону
+					if (backtrack(regionId + 1)) return true; //Якщо рішення не вдалося, видаляємо тетроміно і пробуємо інший метод розміщення фігури/інше положення(rotate)/іншу фігуру
+				}
+				field.removeTetromino(baseX, baseY, shape);
 			}
 		}
 	}
