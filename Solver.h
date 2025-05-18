@@ -1,3 +1,13 @@
+/*----------------------------------------------------------------<Header>-
+Name: Solver.h
+Title: Header для Solver-у задачі(пазлу).
+Group: ТВ-43
+Student: Галюк Д. В.
+Written: 2025-05-13
+Revised: 2025-05-18
+Description: Заголовочний файл класу Solver.
+------------------------------------------------------------------</Header>-*/
+
 #ifndef SOLVER_H
 #define SOLVER_H
 #include "PuzzleField.h" //Для роботи з полем

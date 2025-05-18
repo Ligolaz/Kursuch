@@ -1,3 +1,13 @@
+/*----------------------------------------------------------------<Header>-
+Name: PuzzleField.h
+Title: Хедер Puzzle Field.
+Group: ТВ-43
+Student: Галюк Д. В.
+Written: 2025-05-17
+Revised: 2025-05-18
+Description: Заголовочний файл класу PuzzleField.
+------------------------------------------------------------------</Header>-*/
+
 #ifndef PUZZLEFIELD_H
 #define PUZZLEFIELD_H
 

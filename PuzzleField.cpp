@@ -1,16 +1,39 @@
-#include "PuzzleField.h" //Відповідний рівень
+/*----------------------------------------------------------------<Header>-
+Name: PuzzleField.cpp
+Title: Імплементація Puzzle Field.
+Group: ТВ-43
+Student: Галюк Д. В.
+Written: 2025-05-17
+Revised: 2025-05-18
+Description: Реалізація класу PuzzleField — поле для тетроміно, також роботи
+з ігровим полем та перевірок правильності розміщення тетроміно.
+------------------------------------------------------------------</Header>-*/
+
+#include "PuzzleField.h" //Відповідний хедер
 #include <iostream>
 #include <queue> //Для queue у обході матриці в ширину
 
+/*------------------------------------------------------------------------------
+Description: Конструктор класуб cтворює поле заданого розміру.
+Parameters: rows — кількість рядків, cols — кількість стовпців.
+-----------------------------------------------------------------------------*/
 PuzzleField::PuzzleField(int rows, int cols) : rows(rows), cols(cols) { //Конструктор поля з заданою кількістю рядків і стовпців
 	field = vector<vector<char>>(rows, vector<char>(cols, '.'));
 	regions = vector<vector<int>>(rows, vector<int>(cols, 0));
 }
 
+/*------------------------------------------------------------------------------
+Function: setRegionMap.
+Description: Встановлення мапи регіонів на полі.
+-----------------------------------------------------------------------------*/
 void PuzzleField::setRegionMap(const vector<vector<int>>& regionMap) { //Встановлення мапи
 	regions = regionMap;
 }
 
+/*-----------------------------------------------------------------------------
+Function: canPlaceTetromino.
+Description: Перевірка, чи можна розмістити фігуру на полі.
+-----------------------------------------------------------------------------*/
 bool PuzzleField::canPlaceTetromino(int x, int y, const vector<Coord>& shape) { //Перевірка: чи можна розмістити фігуру
 	for (const Coord& c : shape) {
 		int nx = x + c.x;
@@ -20,23 +43,36 @@ bool PuzzleField::canPlaceTetromino(int x, int y, const vector<Coord>& shape) { 
 	return true;
 }
 
+/*-----------------------------------------------------------------------------
+Function: placeTetromino.
+Description: Розміщує фігуру на полі.
+-----------------------------------------------------------------------------*/
 void PuzzleField::placeTetromino(int x, int y, const vector<Coord>& shape, char symbol) { //Розміщення фігури на полі
 	for (const Coord& c : shape) {
 		field[x + c.x][y + c.y] = symbol;
 	}
 }
 
+/*-----------------------------------------------------------------------------
+Function: removeTetromino.
+Description: Видаляє фігуру з поля, тобто замінює на '.'.
+-----------------------------------------------------------------------------*/
 void PuzzleField::removeTetromino(int x, int y, const vector<Coord>& shape) { //Видалення фігури з поля
 	for (const Coord& c : shape) {
 		field[x + c.x][y + c.y] = '.';
 	}
 }
 
+/* ---------------------------------------------------------------------------
+Function: checkNoSquares.
+Description: Перевіряє, що в полі немає квадратів 2на2 у одному регіоні(хоча
+за умовою треба було з усіх регіонів).
+-----------------------------------------------------------------------------*/
 bool PuzzleField::checkNoSquares() const { //Перевірка відсутності квадратів
 	for (int i = 0; i < rows-1; ++i) {
 		for (int j = 0; j < cols-1; ++j) {
 			//Всі клітини мають бути зафарбовані
-			if (field[i][j]     != '.' &&
+			if (field[i][j] != '.' &&
 				field[i][j + 1] != '.' &&
 				field[i + 1][j] != '.' &&
 				field[i + 1][j + 1] != '.') {
@@ -45,7 +81,7 @@ bool PuzzleField::checkNoSquares() const { //Перевірка відсутно
 				if (regions[i][j+1] == reg &&
 					regions[i+1][j] == reg &&
 					regions[i+1][j+1] == reg) {
-					return false; //Квадрат у межах одного регіону (одного тетроміно)
+					return false; //Квадрат у межах одного регіону
 				}
 			}
 		}
@@ -53,7 +89,11 @@ bool PuzzleField::checkNoSquares() const { //Перевірка відсутно
 	return true;
 }
 
-bool PuzzleField::noSameTetramino(int baseX, int baseY, const vector<Coord>& shape, char symbol) const { //Перевірка на те, щоб однакові фігури не торкалися сторонами один одного
+/*-----------------------------------------------------------------------------
+Function: noSameTetramino.
+Description: Перевіряє, щоб однакові фігури не торкались сторонами один одного.
+-----------------------------------------------------------------------------*/
+bool PuzzleField::noSameTetramino(int baseX, int baseY, const vector<Coord>& shape, char symbol) const {
     const int dx[] = {-1, 0, 1, 0};
     const int dy[] = {0, 1, 0, -1};
     for (const Coord& c : shape) {
@@ -63,13 +103,17 @@ bool PuzzleField::noSameTetramino(int baseX, int baseY, const vector<Coord>& sha
         for (int d = 0; d < 4; ++d) {
             int nx = x + dx[d], ny = y + dy[d];
             if (!inside(nx, ny)) continue;
-            if (regions[nx][ny] == myRegion) continue; // всередині того ж регіону — це ОК!
-            if (field[nx][ny] == symbol) return false; // знайшли сусідній такий самий символ, але в іншому регіоні
+            if (regions[nx][ny] == myRegion) continue; //Всередині того ж регіону ок.
+            if (field[nx][ny] == symbol) return false; //Знайшли сусідній такий самий символ, але в іншому регіоні
         }
     }
     return true;
 }
 
+/*-----------------------------------------------------------------------------
+Function: checkConnected.
+Description: Перевірка зв’язності всіх заповнених клітин згідно умови.
+-----------------------------------------------------------------------------*/
 bool PuzzleField::checkConnected() const { //Перевірка зв’язності незаповнених клітин
 	vector<vector<bool>> visited(rows, vector<bool>(cols, false));
 	queue<Coord> q;
@@ -104,14 +148,22 @@ bool PuzzleField::checkConnected() const { //Перевірка зв’язно�
 	return total == seen;
 }
 
-void PuzzleField::print() const { //Вивід поля
+/* ----------------------------------------------------------------------------
+Function: print.
+Description: Вивід поля у консоль.
+-----------------------------------------------------------------------------*/
+void PuzzleField::print() const {
 	for (const auto& row : field) {
 		for (char ch : row) cout << ch << ' ';
 		cout << '\n';
 	}
 }
 
-int PuzzleField::getRegionCount() const { //Повертає кількість регіонів
+/*-----------------------------------------------------------------------------
+Function: getRegionCount.
+Description: Повертає кількість регіонів.
+-----------------------------------------------------------------------------*/
+int PuzzleField::getRegionCount() const {
 	int maxId = 0;
 	for (const auto& row : regions)
 		for (int val : row)
@@ -119,11 +171,19 @@ int PuzzleField::getRegionCount() const { //Повертає кількість 
 	return maxId;
 }
 
-const vector<vector<int>>& PuzzleField::getRegionMap() const { //Повертає мапу
+/* ----------------------------------------------------------------------------
+Function: getRegionMap.
+Description: Повертає мапу регіонів.
+-----------------------------------------------------------------------------*/
+const vector<vector<int>>& PuzzleField::getRegionMap() const {
 	return regions;
 }
 
-vector<Coord> PuzzleField::getRegionCells(int regionId) const { //Повертає координати клітин регіону
+/*-----------------------------------------------------------------------------
+Function: getRegionCells.
+Description: Повертає координати всіх клітини, що належать до заданого регіону.
+-----------------------------------------------------------------------------*/
+vector<Coord> PuzzleField::getRegionCells(int regionId) const {
 	vector<Coord> result;
 	for (int i = 0; i < rows; ++i)
 		for (int j = 0; j < cols; ++j)
@@ -132,6 +192,10 @@ vector<Coord> PuzzleField::getRegionCells(int regionId) const { //Поверта
 	return result;
 }
 
-bool PuzzleField::inside(int x, int y) const { //Перевірка: чи координата в межах поля
+/*-----------------------------------------------------------------------------
+Function: inside.
+Description: Перевірка, чи знаходиться координата в межах поля.
+-----------------------------------------------------------------------------*/
+bool PuzzleField::inside(int x, int y) const {
 	return x >= 0 && x < rows && y >= 0 && y < cols;
 }
